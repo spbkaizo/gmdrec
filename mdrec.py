@@ -70,9 +70,12 @@ def main():
 
     try:
         logger.info("Starting gmdrec...")
-        if have_gooey: print('Progress: -1/1')
         check_connection()
+        if have_gooey: print('Progress: -1/1')
         tracklist = request_playlist_content(args)
+        if not tracklist:
+            logger.error("No tracks found in the playlist.")
+            return
         tracklist = sanitize_tracklist(tracklist, args.language_code)
         #print('The playlist contains the following tracks:')
         logger.info('The playlist contains the following tracks:')

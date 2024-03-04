@@ -14,6 +14,7 @@ from settings import wipers
 os.environ["BLINKA_MCP2221"] = "1"
 
 #logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 try:
     import board
@@ -21,8 +22,9 @@ try:
     import busio
     i2c = busio.I2C(board.SCL, board.SDA)
     from adafruit_bus_device.i2c_device import I2CDevice
-except RuntimeError:
-    logging.warning("Titler not conneted to USB! \n")
+except Exception as e:
+    logger.error(f"Failed to import hardware libraries or initialize I2C: {e}")
+    raise SystemExit
 
 
 def read_mcp_eeprom(address):
@@ -72,7 +74,7 @@ def shutdown_pot_mcp4562():
 def write_pot_ad5245(value):
     pot.write(bytes([0x00 & 0xff, value & 0xff]))
 
-def write_pot_mcp4551():
+def write_pot_mcp4551(value):
     pot.write(bytes([0x00 & 0xff, value & 0xff]))
     # does this need the 'resume from shutdown?' 
 
