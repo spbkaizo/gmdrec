@@ -76,7 +76,10 @@ def write_pot_ad5245(value):
 
 def write_pot_mcp4551(value):
     pot.write(bytes([0x00 & 0xff, value & 0xff]))
-    # does this need the 'resume from shutdown?' 
+    pot.write(bytes([0b01000000, 0b11111111])) # re-enable pot
+
+def reenable_pot_mcp4551():
+    pot.write(bytes([0b01000000, 0b11111111]))
 
 def write_pot_mcp4562(value):
     pot.write(bytes([0x00 & 0xff, value & 0xff]))
